@@ -64,7 +64,6 @@ const posts = [
   <div class="landing-page">
     <main class="main-content">
       <section class="hero-section">
-        <h1 class="hero-title">Fortune Finder</h1>
         <p class="hero-description">
           사주, 신점, 타로에 대한 모든 정보를 한 곳에서 만나보세요
         </p>
@@ -132,7 +131,7 @@ const posts = [
 
 .hero-section {
   text-align: center;
-  padding: 4rem 0 3rem;
+  padding: 2rem 0 1rem;
 }
 
 .hero-title {
@@ -144,7 +143,7 @@ const posts = [
 }
 
 .hero-description {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: #6b7280;
   margin-bottom: 3rem;
   max-width: 600px;
@@ -197,13 +196,13 @@ const posts = [
 
 
 .search-input {
-  padding: 0.75rem 1rem;
+  padding: 1rem 1.25rem;
   border: 2px solid #e5e7eb;
   border-radius: 0.5rem;
   font-size: 1rem;
   min-width: 300px;
   flex: 1;
-  max-width: 400px;
+  max-width: 500px;
 }
 
 .search-input:focus {
@@ -212,7 +211,7 @@ const posts = [
 }
 
 .search-button {
-  padding: 0.75rem 2rem;
+  padding: 1rem 1.25rem;
   background-color: #F37021;
   color: white;
   border: none;
@@ -229,7 +228,7 @@ const posts = [
 
 /* Posts Section */
 .posts-section {
-  margin-top: 4rem;
+  margin-top: 2rem;
   padding: 2rem 0;
 }
 
@@ -269,7 +268,8 @@ const posts = [
 
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  /* 메인 뷰 후기 컬럼 개수 조정 CSS */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
   gap: 1.5rem;
 }
 
