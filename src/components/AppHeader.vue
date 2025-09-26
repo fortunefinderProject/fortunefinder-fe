@@ -61,7 +61,7 @@ const handleNavigation = (menu: string) => {
   align-items: center;
   gap: 0.5rem;
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 480;
   color: #1f2937;
 }
 
