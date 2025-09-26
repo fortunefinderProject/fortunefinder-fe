@@ -1,8 +1,17 @@
 <script setup lang="ts">
+
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 // Handle login button click
 const handleLogin = () => {
   console.log('Login clicked')
-  // TODO: Implement login functionality
+  router.push('/login')
+  
+}
+
+const clickLogo = () => {
+  router.push('/')
 }
 
 // Handle navigation clicks
@@ -16,7 +25,7 @@ const handleNavigation = (menu: string) => {
   <header class="app-header">
     <div class="header-container">
       <!-- Logo section -->
-      <div class="logo">
+      <div class="logo" @click="clickLogo">
         <img src="/images/fflogo.png" alt="FortuneFinder" class="logo-image">
         FortuneFinder
       </div>
@@ -63,6 +72,10 @@ const handleNavigation = (menu: string) => {
   font-size: 1.5rem;
   font-weight: 480;
   color: #1f2937;
+}
+
+.logo:hover{
+  cursor: pointer;
 }
 
 .logo-image {
