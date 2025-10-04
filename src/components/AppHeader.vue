@@ -1,17 +1,17 @@
 <script setup lang="ts">
-
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+
+// Handle logo click - navigate to home
+const clickLogo = () => {
+  router.push({ name: 'home' })
+}
+
 // Handle login button click
 const handleLogin = () => {
   console.log('Login clicked')
-  router.push('/login')
-  
-}
-
-const clickLogo = () => {
-  router.push('/')
+  // TODO: Implement login functionality
 }
 
 // Handle navigation clicks
@@ -26,19 +26,9 @@ const handleNavigation = (menu: string) => {
     <div class="header-container">
       <!-- Logo section -->
       <div class="logo" @click="clickLogo">
-        <img src="/images/fflogo.png" alt="FortuneFinder" class="logo-image">
+        <img src="/images/fflogo.svg" alt="FortuneFinder" class="logo-image">
         FortuneFinder
       </div>
-
-      <!-- Navigation menu -->
-      <nav class="nav-menu">
-        <button class="nav-item" @click="handleNavigation('커뮤니티')">
-          커뮤니티
-        </button>
-        <button class="nav-item" @click="handleNavigation('포춘지도')">
-          포춘지도
-        </button>
-      </nav>
 
       <!-- Login button -->
       <button class="login-btn" @click="handleLogin">
@@ -72,9 +62,6 @@ const handleNavigation = (menu: string) => {
   font-size: 1.5rem;
   font-weight: 480;
   color: #1f2937;
-}
-
-.logo:hover{
   cursor: pointer;
 }
 
@@ -100,34 +87,6 @@ const handleNavigation = (menu: string) => {
 }
 
 .login-btn:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(243, 112, 33, 0.1);
-}
-
-.nav-menu {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-}
-
-.nav-item {
-  background: none;
-  border: none;
-  color: #4b5563;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  transition: all 0.2s ease;
-}
-
-.nav-item:hover {
-  color: #F37021;
-  background-color: rgba(243, 112, 33, 0.05);
-}
-
-.nav-item:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(243, 112, 33, 0.1);
 }
