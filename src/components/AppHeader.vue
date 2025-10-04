@@ -1,4 +1,13 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+// Handle logo click - navigate to home
+const clickLogo = () => {
+  router.push({ name: 'home' })
+}
+
 // Handle login button click
 const handleLogin = () => {
   console.log('Login clicked')
@@ -53,6 +62,7 @@ const handleNavigation = (menu: string) => {
   font-size: 1.5rem;
   font-weight: 480;
   color: #1f2937;
+  cursor: pointer;
 }
 
 .logo-image {
