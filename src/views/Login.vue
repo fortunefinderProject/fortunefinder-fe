@@ -15,7 +15,7 @@ const handleNaverLogin = () => {
   <div class="login-page">
     <!-- 로고 -->
     <div class="logo-box">
-      <img src="/images/fflogo.png" alt="FortuneFinder" class="logo-image">
+      <img src="/images/fflogo.svg" alt="FortuneFinder" class="logo-image">
       FortuneFinder
     </div>
 

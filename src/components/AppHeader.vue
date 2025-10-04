@@ -10,6 +10,7 @@ const clickLogo = () => {
 
 // Handle login button click
 const handleLogin = () => {
+  router.push({ name: 'login'})
   console.log('Login clicked')
   // TODO: Implement login functionality
 }
