@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import AppHeader from './components/AppHeader.vue';
+import PopularPlaces from './components/PopularPlaces.vue';
 
 </script>
 
 <template>
   <AppHeader/>
   <RouterView />
+  <PopularPlaces fortuneType="사주" />
 </template>
 
 <style>
