@@ -16,6 +16,10 @@ import AppHeader from './components/AppHeader.vue';
   box-sizing: border-box;
 }
 
+html {
+  overflow-y: scroll;
+}
+
 html, body {
   height: 100%;
   width: 100%;
