@@ -25,7 +25,7 @@ const handlePostRegistration = () => {
   // TODO: Implement post registration functionality
 }
 
-// Sample posts data
+// 임시 데이터
 const posts = [
   {
     id: 1,
@@ -77,16 +77,22 @@ const posts = [
           <button class="fortune-button" @click="selectFortuneType('사주')">사주</button>
           <button class="fortune-button" @click="selectFortuneType('신점')">신점</button>
           <button class="fortune-button" @click="selectFortuneType('타로')">타로</button>
+          <button class="fortune-button" @click="selectFortuneType('작명')">작명</button>
         </div>
       </section>
 
       <!-- Posts Section -->
       <section class="posts-section">
         <div class="posts-header">
-          <h2 class="posts-title">최근 후기</h2>
-          <button class="register-post-button" @click="handlePostRegistration">
-            후기 작성하기
-          </button>
+          <h2 class="posts-title">커뮤니티 인기글</h2>
+          <div class="posts-button">
+            <button class="register-post-button" @click="handlePostRegistration">
+              후기 작성하기
+            </button>
+            <button class="register-post-button" @click="handlePostRegistration">
+              커뮤니티로 가기
+            </button>
+          </div>
         </div>
         
         <div class="posts-grid">
@@ -246,6 +252,10 @@ const posts = [
   font-weight: bold;
   color: #1f2937;
   margin: 0;
+}
+.posts-button{
+  display: flex;
+  gap: 10px
 }
 
 .register-post-button {
