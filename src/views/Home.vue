@@ -1,31 +1,40 @@
 <script setup lang="ts">
-// Landing page for all users (no login required)
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-// Handle fortune type selection
-const selectFortuneType = (type: string) => {
-  console.log(`Selected fortune type: ${type}`)
-  // TODO: Implement navigation or store selection
-}
+const router = useRouter()
+const searchKeyword = ref('')
 
-// Handle search
+// 검색
 const handleSearch = () => {
-  console.log('Search clicked')
-  // TODO: Implement search functionality
+  router.push({ path: '/search', query: { q: searchKeyword.value } })
 }
 
-// Handle place registration
-const handlePlaceRegistration = () => {
-  console.log('Place registration clicked')
-  // TODO: Implement place registration functionality
+// 후기 작성 페이지 이동
+const writePost = () => {
+  router.push('/post/write')
 }
 
-// Handle post registration
-const handlePostRegistration = () => {
-  console.log('Post registration clicked')
-  // TODO: Implement post registration functionality
+// 커뮤니티 페이지 이동
+const goToCommunity = () => {
+  router.push('/community')
 }
 
-// 임시 데이터
+// 카테고리 → 영어 매핑
+const categoryMapping: Record<string, string> = {
+  '사주': 'saju',
+  '신점': 'shinjeom',
+  '타로': 'tarot',
+  '작명': 'naming'
+}
+
+// 버튼 클릭 → Category.vue 이동
+const selectFortuneType = (type: string) => {
+  const category = categoryMapping[type] || 'etc'
+  router.push({ name: 'category', params: { type: category } })
+}
+
+// 임시 포스트 데이터
 const posts = [
   {
     id: 1,
@@ -67,11 +76,17 @@ const posts = [
         <p class="hero-description">
           사주, 신점, 타로에 대한 모든 정보를 한 곳에서 만나보세요
         </p>
+
         <div class="search-row">
-          <input type="text" class="search-input" placeholder="장소명 또는 키워드를 입력하세요">
+          <input 
+            type="text" 
+            v-model="searchKeyword" 
+            class="search-input" 
+            placeholder="장소명 또는 키워드를 입력하세요"
+          />
           <button class="search-button" @click="handleSearch">검색</button>
         </div>
-        
+
         <!-- Fortune type selection buttons -->
         <div class="fortune-selection">
           <button class="fortune-button" @click="selectFortuneType('사주')">사주</button>
@@ -86,21 +101,13 @@ const posts = [
         <div class="posts-header">
           <h2 class="posts-title">커뮤니티 인기글</h2>
           <div class="posts-button">
-            <button class="register-post-button" @click="handlePostRegistration">
-              후기 작성하기
-            </button>
-            <button class="register-post-button" @click="handlePostRegistration">
-              커뮤니티로 가기
-            </button>
+            <button class="register-post-button" @click="writePost">후기 작성하기</button>
+            <button class="register-post-button" @click="goToCommunity">커뮤니티로 가기</button>
           </div>
         </div>
-        
+
         <div class="posts-grid">
-          <article 
-            v-for="post in posts" 
-            :key="post.id" 
-            class="post-card"
-          >
+          <article v-for="post in posts" :key="post.id" class="post-card">
             <div class="post-category">{{ post.category }}</div>
             <h3 class="post-title">{{ post.title }}</h3>
             <p class="post-preview">{{ post.preview }}</p>
@@ -138,14 +145,6 @@ const posts = [
 .hero-section {
   text-align: center;
   padding: 2rem 0 1rem;
-}
-
-.hero-title {
-  font-size: 3rem;
-  font-weight: bold;
-  color: #1f2937;
-  margin-bottom: 1.5rem;
-  line-height: 1.2;
 }
 
 .hero-description {
@@ -189,8 +188,6 @@ const posts = [
   transform: translateY(0);
 }
 
-
-
 .search-row {
   display: flex;
   gap: 1rem;
@@ -199,7 +196,6 @@ const posts = [
   margin-bottom: 2rem;
   flex-wrap: wrap;
 }
-
 
 .search-input {
   padding: 1rem 1.25rem;
@@ -253,9 +249,10 @@ const posts = [
   color: #1f2937;
   margin: 0;
 }
-.posts-button{
+
+.posts-button {
   display: flex;
-  gap: 10px
+  gap: 10px;
 }
 
 .register-post-button {
@@ -278,7 +275,6 @@ const posts = [
 
 .posts-grid {
   display: grid;
-  /* 메인 뷰 후기 컬럼 개수 조정 CSS */
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
   gap: 1.5rem;
 }
@@ -355,57 +351,15 @@ const posts = [
   gap: 0.25rem;
 }
 
-
-/* Responsive design */
+/* Responsive - 모바일/태블릿용 */
 @media (max-width: 768px) {
-  .main-content {
-    padding: 1rem;
-  }
-  
-  .hero-title {
-    font-size: 2.5rem;
-  }
-  
-  .hero-actions {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .cta-button {
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  .search-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .search-input {
-    min-width: 100%;
-    max-width: 100%;
-  }
-  
-  .search-button {
-    width: 100%;
-  }
-  
-  .posts-header {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-  }
-  
-  .posts-title {
-    font-size: 1.75rem;
-  }
-  
-  .register-post-button {
-    width: 100%;
-  }
-  
-  .posts-grid {
-    grid-template-columns: 1fr;
-  }
+  .main-content { padding: 1rem; }
+  .hero-title { font-size: 2.5rem; }
+  .search-row { flex-direction: column; align-items: stretch; }
+  .search-input, .search-button { width: 100%; }
+  .posts-header { flex-direction: column; align-items: stretch; text-align: center; }
+  .posts-title { font-size: 1.75rem; }
+  .register-post-button { width: 100%; }
+  .posts-grid { grid-template-columns: 1fr; }
 }
 </style>
