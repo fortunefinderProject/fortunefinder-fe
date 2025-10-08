@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import ShopDetailModal from './ShopDetailModal.vue'
 
 // Props to receive the selected fortune type
 interface Props {
@@ -10,8 +11,21 @@ const props = withDefaults(defineProps<Props>(), {
   fortuneType: '사주'
 })
 
+interface Shop {
+  id: number
+  name: string
+  address: string
+  rating: number
+  reviewCount: number
+  priceRange: '$' | '$$' | '$$$'
+}
+
 // State for flip animation
 const isFlipped = ref(false)
+
+// Modal state
+const isModalOpen = ref(false)
+const selectedShop = ref<Shop | null>(null)
 
 // Toggle flip state
 const toggleFlip = () => {
@@ -19,18 +33,24 @@ const toggleFlip = () => {
 }
 
 // Sample popular places data - would come from API in production
-const popularPlaces = ref([
-  { id: 1, name: '강남 사주카페', rating: 4.8, reviews: 128 },
-  { id: 2, name: '명동 점집', rating: 4.9, reviews: 256 },
-  { id: 3, name: '홍대 타로샵', rating: 4.7, reviews: 95 },
-  { id: 4, name: '신촌 운세방', rating: 4.6, reviews: 73 },
-  { id: 5, name: '이태원 점술소', rating: 4.8, reviews: 142 }
+const popularPlaces = ref<Shop[]>([
+  { id: 1, name: '강남 사주카페', rating: 4.8, reviewCount: 128, address: '서울특별시 강남구 테헤란로 123', priceRange: '$$' },
+  { id: 2, name: '명동 점집', rating: 4.9, reviewCount: 256, address: '서울특별시 중구 명동길 45', priceRange: '$$$' },
+  { id: 3, name: '홍대 타로샵', rating: 4.7, reviewCount: 95, address: '서울특별시 마포구 홍익로 78', priceRange: '$' },
+  { id: 4, name: '신촌 운세방', rating: 4.6, reviewCount: 73, address: '서울특별시 서대문구 신촌로 90', priceRange: '$$' },
+  { id: 5, name: '이태원 점술소', rating: 4.8, reviewCount: 142, address: '서울특별시 용산구 이태원로 234', priceRange: '$$$' }
 ])
 
-// Handle place click
-const handlePlaceClick = (placeId: number) => {
-  console.log(`Navigate to place: ${placeId}`)
-  // TODO: Implement navigation to place detail page
+// Handle place click - open modal with shop details
+const handlePlaceClick = (place: Shop) => {
+  selectedShop.value = place
+  isModalOpen.value = true
+}
+
+// Close modal
+const closeModal = () => {
+  isModalOpen.value = false
+  selectedShop.value = null
 }
 </script>
 
@@ -64,13 +84,13 @@ const handlePlaceClick = (placeId: number) => {
               v-for="place in popularPlaces"
               :key="place.id"
               class="place-item"
-              @click="handlePlaceClick(place.id)"
+              @click="handlePlaceClick(place)"
             >
               <div class="place-info">
                 <div class="place-name">{{ place.name }}</div>
                 <div class="place-stats">
                   <span class="rating">⭐ {{ place.rating }}</span>
-                  <span class="reviews">리뷰 {{ place.reviews }}</span>
+                  <span class="reviews">리뷰 {{ place.reviewCount }}</span>
                 </div>
               </div>
             </div>
@@ -78,6 +98,13 @@ const handlePlaceClick = (placeId: number) => {
         </div>
       </div>
     </div>
+
+    <!-- Shop Detail Modal -->
+    <ShopDetailModal
+      :shop="selectedShop"
+      :is-open="isModalOpen"
+      @close="closeModal"
+    />
   </div>
 </template>
 
