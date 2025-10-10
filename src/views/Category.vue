@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
-// 라우터에서 type param 받아오기
-const route = useRoute()
+const router = useRouter() // 페이지 이동 등 라우팅 동작(push, replace, go 등) 수행
+const route = useRoute() // 현재 활성화된 라우트 정보(params, query) 읽을 때 사용
+
+// 라우트에서 type param 가져오기
 const categoryType = computed(() => route.params.type || '카테고리')
 
 // 선택한 지역
@@ -13,7 +15,7 @@ const selectedCity = ref('서울') // 기본값 서울
 // 드롭다운 상태
 const showDropdown = ref(false)
 
-// 최근 선택 지역
+// 최근 선택 지역 (최대 5개)
 const recentRegions = ref<string[]>([])
 
 // 시/구 데이터
@@ -49,6 +51,7 @@ const selectDistrict = (district: string) => {
   selectedRegion.value = region
   showDropdown.value = false
 
+  // 최근 선택 지역 업데이트
   if (!recentRegions.value.includes(region)) {
     recentRegions.value.unshift(region)
     if (recentRegions.value.length > 5) recentRegions.value.pop()
@@ -63,6 +66,7 @@ const removeRecentRegion = (index: number) => {
 // 현재 위치 기반 선택
 const useCurrentLocation = () => {
   console.log('현재 위치 기반 선택')
+  router.push({ name: 'map' }) // 단순히 MapView로 이동
 }
 </script>
 

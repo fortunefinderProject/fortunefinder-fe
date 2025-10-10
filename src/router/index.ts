@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import Category from '@/views/Category.vue'
+import MapView from '@/views/MapView.vue'
 
 const routes = [
   {
@@ -18,7 +19,11 @@ const routes = [
     path: '/:type', 
     name: 'category', 
     component: Category 
-  }
+  },
+  { path: '/map', 
+    name: 'map', 
+    component: MapView 
+  },
 ]
 
 const router = createRouter({
