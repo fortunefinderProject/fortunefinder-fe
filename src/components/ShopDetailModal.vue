@@ -43,6 +43,25 @@ const userReview = ref({
   rating: 5
 })
 
+// Tab state
+const activeTab = ref<'reviews' | 'prices'>('reviews')
+
+// Sample price data
+interface PriceEntry {
+  id: number
+  author: string
+  service: string
+  price: number
+  date: string
+}
+
+const prices = ref<PriceEntry[]>([
+  { id: 1, author: '김철수', service: '사주팔자', price: 30000, date: '2025-10-05' },
+  { id: 2, author: '이영희', service: '타로 상담', price: 20000, date: '2025-10-03' },
+  { id: 3, author: '박민수', service: '종합 운세', price: 50000, date: '2025-09-28' },
+  { id: 4, author: '최지우', service: '궁합 풀이', price: 40000, date: '2025-09-25' }
+])
+
 /**
  * Close modal when clicking outside or on close button
  */
@@ -144,10 +163,28 @@ const handleContentClick = (e: Event) => {
 
         <!-- Content Section -->
         <div class="modal-content">
-          <!-- Left: Reviews Section -->
+          <!-- Left: Reviews/Prices Section -->
           <div class="reviews-section">
-            <h3 class="section-title">리뷰</h3>
-            <div class="reviews-list">
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+              <button
+                class="tab-button"
+                :class="{ active: activeTab === 'reviews' }"
+                @click="activeTab = 'reviews'"
+              >
+                리뷰
+              </button>
+              <button
+                class="tab-button"
+                :class="{ active: activeTab === 'prices' }"
+                @click="activeTab = 'prices'"
+              >
+                가격표
+              </button>
+            </div>
+
+            <!-- Reviews List -->
+            <div v-if="activeTab === 'reviews'" class="reviews-list">
               <div
                 v-for="review in reviews"
                 :key="review.id"
@@ -169,6 +206,22 @@ const handleContentClick = (e: Event) => {
                 <div class="review-footer">
                   <button class="read-more-button">더보기</button>
                 </div>
+              </div>
+            </div>
+
+            <!-- Prices List -->
+            <div v-if="activeTab === 'prices'" class="prices-list">
+              <div
+                v-for="price in prices"
+                :key="price.id"
+                class="price-item"
+              >
+                <div class="price-header">
+                  <span class="price-author">{{ price.author }}</span>
+                  <span class="price-date">{{ price.date }}</span>
+                </div>
+                <div class="price-service">{{ price.service }}</div>
+                <div class="price-amount">{{ price.price.toLocaleString() }}원</div>
               </div>
             </div>
           </div>
@@ -395,6 +448,44 @@ const handleContentClick = (e: Event) => {
   border-bottom: 2px solid #F37021;
 }
 
+/* Tab Navigation */
+.tab-navigation {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #9ca3af;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.tab-button:hover {
+  color: #6b7280;
+}
+
+.tab-button.active {
+  color: #1f2937;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #F37021;
+}
+
 /* Reviews Section */
 .reviews-section {
   display: flex;
@@ -503,6 +594,56 @@ const handleContentClick = (e: Event) => {
 }
 .read-more-button:hover{
   color: #6b7280;
+}
+
+/* Prices Section */
+.prices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.price-item {
+  padding: 1.25rem;
+  background-color: #f9fafb;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s;
+}
+
+.price-item:hover {
+  background-color: #fff7ed;
+  border-color: #F37021;
+  box-shadow: 0 2px 8px rgba(243, 112, 33, 0.1);
+}
+
+.price-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.price-author {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.price-date {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.price-service {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+}
+
+.price-amount {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #F37021;
 }
 
 /* Write Review Section */
