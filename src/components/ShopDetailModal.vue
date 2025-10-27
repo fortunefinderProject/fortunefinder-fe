@@ -166,6 +166,9 @@ const handleContentClick = (e: Event) => {
                   <span v-for="i in 5" :key="i" class="star" :class="{ filled: i <= review.rating }">★</span>
                 </div>
                 <p class="review-content">{{ review.content }}</p>
+                <div class="review-footer">
+                  <button class="read-more-button">더보기</button>
+                </div>
               </div>
             </div>
           </div>
@@ -483,6 +486,23 @@ const handleContentClick = (e: Event) => {
   color: #4b5563;
   line-height: 1.6;
   margin: 0;
+}
+.review-footer{
+  display: flex;
+  justify-content: flex-end;
+  margin-top: .5rem;
+}
+.read-more-button{
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  transition: color .2s;
+}
+.read-more-button:hover{
+  color: #6b7280;
 }
 
 /* Write Review Section */
