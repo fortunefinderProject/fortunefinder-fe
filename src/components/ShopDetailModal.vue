@@ -116,6 +116,7 @@ const handleContentClick = (e: Event) => {
             <h2 class="shop-name">{{ shop.name }}</h2>
             <div class="address-section">
               <span class="address-text">{{ shop.address }}</span>
+              <!-- 공유하기 버튼-->
               <button class="copy-button" @click="copyAddress" title="주소 복사">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -127,7 +128,7 @@ const handleContentClick = (e: Event) => {
           <div class="header-right">
             <div class="shop-info">
               <div class="rating-section">
-                <span class="rating-star">⭐</span>
+                <span class="rating-star">★</span>
                 <span class="rating-value">{{ shop.rating }}</span>
                 <span class="review-count">({{ shop.reviewCount }})</span>
               </div>
@@ -162,7 +163,7 @@ const handleContentClick = (e: Event) => {
                   <span class="review-date">{{ review.date }}</span>
                 </div>
                 <div class="review-rating">
-                  <span v-for="i in 5" :key="i" class="star" :class="{ filled: i <= review.rating }">⭐</span>
+                  <span v-for="i in 5" :key="i" class="star" :class="{ filled: i <= review.rating }">★</span>
                 </div>
                 <p class="review-content">{{ review.content }}</p>
               </div>
@@ -184,7 +185,7 @@ const handleContentClick = (e: Event) => {
                     class="star-button"
                     :class="{ active: i <= userReview.rating }"
                   >
-                    ⭐
+                    ★
                   </button>
                 </div>
               </div>
@@ -324,6 +325,7 @@ const handleContentClick = (e: Event) => {
 
 .rating-star {
   font-size: 1.25rem;
+  color: #F37021;
 }
 
 .rating-value {
@@ -469,6 +471,7 @@ const handleContentClick = (e: Event) => {
 
 .star {
   font-size: 0.875rem;
+  color: #F37021;
   opacity: 0.3;
 }
 
@@ -519,6 +522,7 @@ const handleContentClick = (e: Event) => {
   font-size: 2rem;
   cursor: pointer;
   padding: 0;
+  color: #F37021;
   opacity: 0.3;
   transition: all 0.2s;
 }

@@ -7,7 +7,6 @@ import PopularPlaces from './components/PopularPlaces.vue';
 <template>
   <AppHeader/>
   <RouterView />
-  <PopularPlaces fortuneType="사주" />
 </template>
 
 <style>

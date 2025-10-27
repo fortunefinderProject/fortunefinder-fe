@@ -42,7 +42,7 @@
 
       <!-- 카드형 리스트 -->
       <div class="store-list">
-        <div v-for="store in sortedStores" :key="store.id" class="store-card">
+        <div v-for="store in sortedStores" :key="store.id" class="store-card" @click="openShopDetail(store)">
           <h3>{{ store.name }}</h3>
           <p>{{ store.address }}</p>
           <small>★ {{ store.rating }}점 | 리뷰 수: {{ store.reviewCount }}</small>
@@ -56,40 +56,46 @@
         </div>
       </div>
     </div>
+
+    <!-- Shop Detail Modal -->
+    <ShopDetailModal :shop="selectedShop" :isOpen="isModalOpen" @close="closeShopDetail" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import ShopDetailModal from "@/components/ShopDetailModal.vue";
 
 const map = ref(null);
 const markers = ref([]);
 const hoveredStore = ref(null);
 const activeFilter = ref('추천순'); // 기본값
 const isPanelOpen = ref(true); // 패널 열림/닫힘 상태
+const selectedShop = ref(null); // 선택된 상점
+const isModalOpen = ref(false); // 모달 열림/닫힘 상태
 
 const stores = ref([
-  { 
+  {
     id: 1, name: "도깨비 사주풀이", address: "망원로 37-9", lat: 37.5546, lng: 126.9102,
-    rating: 4.8, distance: 250,
+    rating: 4.8, distance: 250, priceRange: '$$',
     hours: "17:00 ~ 02:00", isOpen: true, reviewCount: 12,
     reviews: [
       { id: 1, author: "김철수", content: "신기해요. 친절해요.", date: "2025-10-09" },
       { id: 2, author: "이영희", content: "상세하게 설명해주세요. 추천합니다!", date: "2025-10-08" },
     ]
   },
-  { 
+  {
     id: 2, name: "망리단길 사주카페", address: "포은로 118", lat: 37.5565, lng: 126.9145,
-    rating: 4.7, distance: 320,
+    rating: 4.7, distance: 320, priceRange: '$$$',
     hours: "12:00 ~ 21:00", isOpen: true, reviewCount: 15,
     reviews: [
       { id: 3, author: "최지우", content: "사주 정확해요!", date: "2025-10-09" },
       { id: 4, author: "정민호", content: "카페 분위기도 좋고 상담도 만족스러웠어요.", date: "2025-10-08" },
     ]
   },
-  { 
+  {
     id: 3, name: "연남동 타로&사주", address: "동교로 204", lat: 37.5625, lng: 126.9235,
-    rating: 4.9, distance: 580,
+    rating: 4.9, distance: 580, priceRange: '$$',
     hours: "13:00 ~ 22:00", isOpen: true, reviewCount: 23,
     reviews: [
       { id: 5, author: "한소희", content: "정말 신기했어요. 추천합니다!", date: "2025-10-08" },
@@ -97,18 +103,18 @@ const stores = ref([
       { id: 7, author: "윤서준", content: "고민 해결에 도움 됐습니다.", date: "2025-10-06" },
     ]
   },
-  { 
+  {
     id: 4, name: "홍대 운명풀이", address: "와우산로 29길 18", lat: 37.5575, lng: 126.9265,
-    rating: 4.6, distance: 710,
+    rating: 4.6, distance: 710, priceRange: '$',
     hours: "14:00 ~ 23:00", isOpen: true, reviewCount: 18,
     reviews: [
       { id: 8, author: "이준호", content: "상담 시간이 넉넉해서 좋았어요.", date: "2025-10-09" },
       { id: 9, author: "박서연", content: "재방문 의사 있습니다!", date: "2025-10-07" },
     ]
   },
-  { 
+  {
     id: 5, name: "합정 별자리 사주방", address: "양화로 45", lat: 37.5495, lng: 126.9135,
-    rating: 4.4, distance: 420,
+    rating: 4.4, distance: 420, priceRange: '$$',
     hours: "11:00 ~ 20:00", isOpen: false, reviewCount: 10,
     reviews: [
       { id: 10, author: "김유진", content: "조용하고 프라이빗해요.", date: "2025-10-06" },
@@ -179,6 +185,22 @@ function initMap() {
 
     markers.value.push({ storeId: store.id, marker });
   });
+}
+
+/**
+ * Open shop detail modal
+ */
+function openShopDetail(store) {
+  selectedShop.value = store;
+  isModalOpen.value = true;
+}
+
+/**
+ * Close shop detail modal
+ */
+function closeShopDetail() {
+  isModalOpen.value = false;
+  selectedShop.value = null;
 }
 </script>
 
@@ -285,6 +307,7 @@ function initMap() {
   margin-bottom: 12px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.06);
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .store-card:hover {
