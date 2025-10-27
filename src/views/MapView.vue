@@ -48,7 +48,7 @@
           <small>★ {{ store.rating }}점 | 리뷰 수: {{ store.reviewCount }}</small>
 
           <div class="reviews">
-            <div v-for="review in store.reviews" :key="review.id" class="review-card">
+            <div v-for="review in store.reviews" :key="review.id" class="review-card" @click.stop="openReviewDetail(store, review)">
               <strong>{{ review.author }}</strong> <small>{{ review.date }}</small>
               <p>{{ review.content }}</p>
             </div>
@@ -58,7 +58,12 @@
     </div>
 
     <!-- Shop Detail Modal -->
-    <ShopDetailModal :shop="selectedShop" :isOpen="isModalOpen" @close="closeShopDetail" />
+    <ShopDetailModal
+      :shop="selectedShop"
+      :isOpen="isModalOpen"
+      :selectedReviewId="selectedReviewId"
+      @close="closeShopDetail"
+    />
   </div>
 </template>
 
@@ -73,6 +78,7 @@ const activeFilter = ref('추천순'); // 기본값
 const isPanelOpen = ref(true); // 패널 열림/닫힘 상태
 const selectedShop = ref(null); // 선택된 상점
 const isModalOpen = ref(false); // 모달 열림/닫힘 상태
+const selectedReviewId = ref(null); // 선택된 리뷰 ID
 
 const stores = ref([
   {
@@ -192,6 +198,16 @@ function initMap() {
  */
 function openShopDetail(store) {
   selectedShop.value = store;
+  selectedReviewId.value = null;
+  isModalOpen.value = true;
+}
+
+/**
+ * Open review detail modal directly from MapView
+ */
+function openReviewDetail(store, review) {
+  selectedShop.value = store;
+  selectedReviewId.value = review.id;
   isModalOpen.value = true;
 }
 
@@ -201,6 +217,7 @@ function openShopDetail(store) {
 function closeShopDetail() {
   isModalOpen.value = false;
   selectedShop.value = null;
+  selectedReviewId.value = null;
 }
 </script>
 
@@ -330,10 +347,13 @@ function closeShopDetail() {
   padding: 10px;
   margin-top: 8px;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .review-card:hover {
   background: #fff3e6;
+  border: 1px solid #F37021;
+  transform: translateX(4px);
 }
 
 .hover-info {
