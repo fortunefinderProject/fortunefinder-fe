@@ -21,10 +21,10 @@
         </button>
         <button
           class="filters-button"
-          :class="{ active: activeFilter === '거리순' }"
-          @click="() => { console.log('거리순 클릭'); activeFilter = '거리순'; }"
+          :class="{ active: activeFilter === '리뷰순' }"
+          @click="() => { console.log('리뷰순 클릭'); activeFilter = '리뷰순'; }"
         >
-          거리순
+          리뷰순
         </button>
       </div>
 
@@ -88,6 +88,7 @@ const stores = ref([
     reviews: [
       { id: 1, author: "김철수", content: "신기해요. 친절해요.", date: "2025-10-09" },
       { id: 2, author: "이영희", content: "상세하게 설명해주세요. 추천합니다!", date: "2025-10-08" },
+      { id: 3, author: "이지현", content: "너무 소름돋아요... 제가 지금까지 여러 곳을 가봤었는데 여기는 진짜 추천해요. 한 번 가보세요..", date: "2025-10-08" }
     ]
   },
   {
@@ -95,8 +96,8 @@ const stores = ref([
     rating: 4.7, distance: 320, priceRange: '$$$',
     hours: "12:00 ~ 21:00", isOpen: true, reviewCount: 15,
     reviews: [
-      { id: 3, author: "최지우", content: "사주 정확해요!", date: "2025-10-09" },
-      { id: 4, author: "정민호", content: "카페 분위기도 좋고 상담도 만족스러웠어요.", date: "2025-10-08" },
+      { id: 4, author: "최지우", content: "사주 정확해요!", date: "2025-10-09" },
+      { id: 5, author: "정민호", content: "카페 분위기도 좋고 상담도 만족스러웠어요.", date: "2025-10-08" },
     ]
   },
   {
@@ -104,9 +105,9 @@ const stores = ref([
     rating: 4.9, distance: 580, priceRange: '$$',
     hours: "13:00 ~ 22:00", isOpen: true, reviewCount: 23,
     reviews: [
-      { id: 5, author: "한소희", content: "정말 신기했어요. 추천합니다!", date: "2025-10-08" },
-      { id: 6, author: "강민지", content: "친절하고 자세하게 봐주셨어요.", date: "2025-10-07" },
-      { id: 7, author: "윤서준", content: "고민 해결에 도움 됐습니다.", date: "2025-10-06" },
+      { id: 6, author: "한소희", content: "정말 신기했어요. 추천합니다!", date: "2025-10-08" },
+      { id: 7, author: "강민지", content: "친절하고 자세하게 봐주셨어요.", date: "2025-10-07" },
+      { id: 8, author: "윤서준", content: "고민 해결에 도움 됐습니다.", date: "2025-10-06" },
     ]
   },
   {
@@ -114,8 +115,8 @@ const stores = ref([
     rating: 4.6, distance: 710, priceRange: '$',
     hours: "14:00 ~ 23:00", isOpen: true, reviewCount: 18,
     reviews: [
-      { id: 8, author: "이준호", content: "상담 시간이 넉넉해서 좋았어요.", date: "2025-10-09" },
-      { id: 9, author: "박서연", content: "재방문 의사 있습니다!", date: "2025-10-07" },
+      { id: 9, author: "이준호", content: "상담 시간이 넉넉해서 좋았어요.", date: "2025-10-09" },
+      { id: 10, author: "박서연", content: "재방문 의사 있습니다!", date: "2025-10-07" },
     ]
   },
   {
@@ -123,7 +124,7 @@ const stores = ref([
     rating: 4.4, distance: 420, priceRange: '$$',
     hours: "11:00 ~ 20:00", isOpen: false, reviewCount: 10,
     reviews: [
-      { id: 10, author: "김유진", content: "조용하고 프라이빗해요.", date: "2025-10-06" },
+      { id: 11, author: "김유진", content: "조용하고 프라이빗해요.", date: "2025-10-06" },
     ]
   },
 ]);
@@ -131,7 +132,7 @@ const stores = ref([
 const sortedStores = computed(() => {
   return [...stores.value].sort((a, b) => {
     if (activeFilter.value === "추천순") return b.rating - a.rating;
-    if (activeFilter.value === "거리순") return a.distance - b.distance;
+    if (activeFilter.value === "리뷰순") return a.distance - b.distance;
     return 0;
   });
 });
@@ -363,5 +364,30 @@ function closeShopDetail() {
   padding: 12px;
   margin-bottom: 16px;
   box-shadow: 0 4px 12px rgba(243, 112, 33, 0.2);
+}
+
+.reviews {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 12px;
+  padding-right: 4px;
+}
+
+.reviews::-webkit-scrollbar {
+  width: 6px;
+}
+
+.reviews::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.reviews::-webkit-scrollbar-thumb {
+  background: #F37021;
+  border-radius: 10px;
+}
+
+.reviews::-webkit-scrollbar-thumb:hover {
+  background: #d65a15;
 }
 </style>
