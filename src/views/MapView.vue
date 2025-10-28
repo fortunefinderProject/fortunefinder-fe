@@ -1,90 +1,128 @@
 <template>
-  <div class="main-container">
-    <!-- 지도 영역 -->
-    <div id="map" class="map"></div>
+  <div class="page-wrapper">
+    <!-- MapView 전용 헤더 (AppHeader 스타일 기반) -->
+    <header class="app-header">
+      <div class="header-container">
+        <!-- Left section: Logo + Search bar -->
+        <div class="header-left">
+          <!-- Logo -->
+          <div class="logo" @click="clickLogo">
+            <img src="/images/fflogo.svg" alt="FortuneFinder" class="logo-image">
+            FortuneFinder
+          </div>
 
-    <!-- 접기/펼치기 버튼 -->
-    <button class="toggle-button" @click="isPanelOpen = !isPanelOpen">
-      {{ isPanelOpen ? '>' : '<' }}
-    </button>
+          <!-- Search bar -->
+          <div class="search-bar">
+            <input 
+              type="text" 
+              v-model="searchQuery"
+              placeholder="업체, 주소 검색"
+              @keyup.enter="handleSearch"
+            />
+            <button class="search-button" @click="handleSearch">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
 
-    <!-- 사이드 패널 -->
-    <div class="side-panel" :class="{ closed: !isPanelOpen }">
-      <!-- 리스트 정렬 필터 -->
-      <div class="filters">
-        <button
-          class="filters-button"
-          :class="{ active: activeFilter === '추천순' }"
-          @click="() => { console.log('추천순 클릭'); activeFilter = '추천순'; }"
-        >
-          추천순
-        </button>
-        <button
-          class="filters-button"
-          :class="{ active: activeFilter === '리뷰순' }"
-          @click="() => { console.log('리뷰순 클릭'); activeFilter = '리뷰순'; }"
-        >
-          리뷰순
+        <!-- Right section: Login button -->
+        <button class="login-btn" @click="handleLogin">
+          Login
         </button>
       </div>
+    </header>
 
-      <!-- 마커 호버 시 정보 표시 -->
-      <div v-if="hoveredStore" class="hover-info">
-        <h3>{{ hoveredStore.name }}</h3>
-        <p>ID: {{ hoveredStore.id }}</p>
-        <p>주소: {{ hoveredStore.address }}</p>
-        <p>좌표: ({{ hoveredStore.lat }}, {{ hoveredStore.lng }})</p>
-        <p>운영시간: {{ hoveredStore.hours }}</p>
-        <p>영업중: {{ hoveredStore.isOpen ? '예' : '아니오' }}</p>
-        <p>리뷰 수: {{ hoveredStore.reviewCount }}</p>
-        <p>평점: ★ {{ hoveredStore.rating }}</p>
-      </div>
+    <!-- 메인 컨테이너 -->
+    <div class="main-container">
+      <!-- 지도 영역 -->
+      <div id="map" class="map"></div>
 
-      <!-- 카드형 리스트 -->
-      <div class="store-list">
-        <div v-for="store in sortedStores" :key="store.id" class="store-card" @click="openShopDetail(store)">
-          <h3>{{ store.name }}</h3>
-          <p>{{ store.address }}</p>
-          <small>★ {{ store.rating }}점 | 리뷰 수: {{ store.reviewCount }}</small>
+      <!-- 접기/펼치기 버튼 -->
+      <button class="toggle-button" @click="isPanelOpen = !isPanelOpen">
+        {{ isPanelOpen ? '>' : '<' }}
+      </button>
 
-          <div class="reviews">
-            <div v-for="review in store.reviews" :key="review.id" class="review-card" @click.stop="openReviewDetail(store, review)">
-              <strong>{{ review.author }}</strong> <small>{{ review.date }}</small>
-              <p>{{ review.content }}</p>
+      <!-- 사이드 패널 -->
+      <div class="side-panel" :class="{ closed: !isPanelOpen }">
+        <!-- 리스트 정렬 필터 -->
+        <div class="filters">
+          <button
+            class="filters-button"
+            :class="{ active: activeFilter === '추천순' }"
+            @click="activeFilter = '추천순'"
+          >
+            추천순
+          </button>
+          <button
+            class="filters-button"
+            :class="{ active: activeFilter === '리뷰순' }"
+            @click="activeFilter = '리뷰순'"
+          >
+            리뷰순
+          </button>
+        </div>
+
+        <!-- 마커 호버 시 정보 표시 -->
+        <div v-if="hoveredStore" class="hover-info">
+          <h3>{{ hoveredStore.name }}</h3>
+          <p>ID: {{ hoveredStore.id }}</p>
+          <p>주소: {{ hoveredStore.address }}</p>
+          <p>좌표: ({{ hoveredStore.lat }}, {{ hoveredStore.lng }})</p>
+          <p>운영시간: {{ hoveredStore.hours }}</p>
+          <p>영업중: {{ hoveredStore.isOpen ? '예' : '아니오' }}</p>
+          <p>리뷰 수: {{ hoveredStore.reviewCount }}</p>
+          <p>평점: ★ {{ hoveredStore.rating }}</p>
+        </div>
+
+        <!-- 카드형 리스트 -->
+        <div class="store-list">
+          <div v-for="store in sortedStores" :key="store.id" class="store-card" @click="openShopDetail(store)">
+            <h3>{{ store.name }}</h3>
+            <p>{{ store.address }}</p>
+            <small>★ {{ store.rating }}점 | 리뷰 수: {{ store.reviewCount }}</small>
+
+            <div class="reviews">
+              <div v-for="review in store.reviews" :key="review.id" class="review-card" @click.stop="openReviewDetail(store, review)">
+                <strong>{{ review.author }}</strong> <small>{{ review.date }}</small>
+                <p>{{ review.content }}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Shop Detail Modal -->
-    <ShopDetailModal
-      :shop="selectedShop"
-      :isOpen="isModalOpen"
-      :selectedReviewId="selectedReviewId"
-      @close="closeShopDetail"
-    />
+      <!-- Shop Detail Modal -->
+      <ShopDetailModal
+        :shop="selectedShop"
+        :isOpen="isModalOpen"
+        :selectedReviewId="selectedReviewId"
+        @close="closeShopDetail"
+      />
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { useRouter } from 'vue-router';
 import ShopDetailModal from "@/components/ShopDetailModal.vue";
 
+const router = useRouter();
 const map = ref(null);
 const markers = ref([]);
 const hoveredStore = ref(null);
-const activeFilter = ref('추천순'); // 기본값
-const isPanelOpen = ref(true); // 패널 열림/닫힘 상태
-const selectedShop = ref(null); // 선택된 상점
-const isModalOpen = ref(false); // 모달 열림/닫힘 상태
-const selectedReviewId = ref(null); // 선택된 리뷰 ID
+const activeFilter = ref('추천순');
+const isPanelOpen = ref(true);
+const selectedShop = ref(null);
+const isModalOpen = ref(false);
+const selectedReviewId = ref(null);
+const searchQuery = ref('');
 
 const stores = ref([
   {
     id: 1, name: "도깨비 사주풀이", address: "망원로 37-9", lat: 37.5546, lng: 126.9102,
-    rating: 4.8, distance: 250, priceRange: '$$',
-    hours: "17:00 ~ 02:00", isOpen: true, reviewCount: 12,
+    rating: 4.5, distance: 250, priceRange: '$$',
+    hours: "17:00 ~ 02:00", isOpen: true, reviewCount: 20,
     reviews: [
       { id: 1, author: "김철수", content: "신기해요. 친절해요.", date: "2025-10-09" },
       { id: 2, author: "이영희", content: "상세하게 설명해주세요. 추천합니다!", date: "2025-10-08" },
@@ -130,18 +168,41 @@ const stores = ref([
 ]);
 
 const sortedStores = computed(() => {
-  return [...stores.value].sort((a, b) => {
+  let filtered = stores.value;
+  
+  // 검색어 필터링
+  if (searchQuery.value.trim()) {
+    const query = searchQuery.value.toLowerCase();
+    filtered = filtered.filter(store => 
+      store.name.toLowerCase().includes(query) || 
+      store.address.toLowerCase().includes(query)
+    );
+  }
+  
+  // 정렬 (리뷰순 수정)
+  return [...filtered].sort((a, b) => {
     if (activeFilter.value === "추천순") return b.rating - a.rating;
-    if (activeFilter.value === "리뷰순") return a.distance - b.distance;
+    if (activeFilter.value === "리뷰순") return b.reviewCount - a.reviewCount;
     return 0;
   });
 });
 
+// 라우터 네비게이션
+const clickLogo = () => {
+  router.push({ name: 'home' });
+};
+
+const handleLogin = () => {
+  router.push({ name: 'login' });
+};
+
+const handleSearch = () => {
+  console.log('검색:', searchQuery.value);
+};
+
 onMounted(() => {
-  // 카카오맵 스크립트 로드 확인
   if (typeof kakao === 'undefined') {
     console.error('카카오맵 API가 로드되지 않았습니다.');
-    // 스크립트 동적 로드
     const script = document.createElement('script');
     script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY&autoload=false';
     script.onload = () => {
@@ -194,27 +255,18 @@ function initMap() {
   });
 }
 
-/**
- * Open shop detail modal
- */
 function openShopDetail(store) {
   selectedShop.value = store;
   selectedReviewId.value = null;
   isModalOpen.value = true;
 }
 
-/**
- * Open review detail modal directly from MapView
- */
 function openReviewDetail(store, review) {
   selectedShop.value = store;
   selectedReviewId.value = review.id;
   isModalOpen.value = true;
 }
 
-/**
- * Close shop detail modal
- */
 function closeShopDetail() {
   isModalOpen.value = false;
   selectedShop.value = null;
@@ -223,15 +275,121 @@ function closeShopDetail() {
 </script>
 
 <style scoped>
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* AppHeader 스타일 그대로 유지 */
+.app-header {
+  width: 100%;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 2rem;
+}
+
+/* Left section: Logo + Search bar */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 480;
+  color: #1f2937;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.logo-image {
+  height: 2rem;
+  width: auto;
+}
+
+/* 검색바 (로고 바로 옆) */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 24px;
+  padding: 12.5px 16px;
+  flex: 1;
+  max-width: 500px;
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  padding: 0;
+}
+
+.search-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.search-button:hover {
+  color: #F37021;
+}
+
+.login-btn {
+  background-color: #F37021;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.login-btn:hover {
+  background-color: #e85d0e;
+}
+
+.login-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(243, 112, 33, 0.1);
+}
+
+/* 메인 컨테이너 */
 .main-container {
+  flex: 1;
   display: flex;
   gap: 16px;
   position: relative;
+  overflow: hidden;
 }
 
 .map {
   flex: 2;
-  height: 100vh;
+  height: 100%;
 }
 
 .toggle-button {
@@ -266,7 +424,7 @@ function closeShopDetail() {
 .side-panel {
   flex: 0 0 450px;
   overflow-y: auto;
-  max-height: 100vh;
+  max-height: 100%;
   transition: all 0.3s ease;
 }
 
@@ -294,14 +452,12 @@ function closeShopDetail() {
   transition: all 0.3s ease;
 }
 
-/* 클릭된 상태 */
 .filters-button.active {
   background-color: #F37021;
   color: #fff;
   border-color: #F37021;
 }
 
-/* 호버 시 효과 (활성 상태가 아닐 때만) */
 .filters-button:not(.active):hover {
   background-color: #F37021;
   color: white;

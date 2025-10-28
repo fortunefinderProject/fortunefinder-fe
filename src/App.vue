@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import { computed } from 'vue'         // 반응형 계산 속성 사용
+import { useRoute } from 'vue-router'  // 현재 라우트 정보 가져오기
 import AppHeader from './components/AppHeader.vue';
 import PopularPlaces from './components/PopularPlaces.vue';
 
+const route = useRoute() // 현재 URL 정보
+// MapView일 때는 AppHeader 숨기기
+const showAppHeader = computed(() => route.name !== 'map')
 </script>
 
 <template>
-  <AppHeader/>
+  <AppHeader v-if="showAppHeader" />
   <RouterView />
 </template>
 
